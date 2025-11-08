@@ -354,7 +354,7 @@ def ezville_loop(config):
         msg_length = len(raw_data)
         while k < msg_length:
             # F7로 시작하는 패턴을 패킷으로 분리
-            if raw_data[k:k + 2] == 'F7':
+            if raw_data[k:k + 2] == '04':
                 # 남은 데이터가 최소 패킷 길이를 만족하지 못하면 RESIDUE에 저장 후 종료
                 if k + 10 > msg_length:
                     RESIDUE = raw_data[k:]
@@ -580,7 +580,9 @@ def ezville_loop(config):
                                 await update_state(name, 'outing', rid, sbc, outingonoff)
                                 
                                 MSG_CACHE[packet[0:10]] = packet[10:]
-                                                                                    
+                    else:
+                        log('[WARN] 알수없는 패킷 수신: {}'.format(packet))                                                                
+                        
                 RESIDUE = ''
                 k = k + packet_length
                 
